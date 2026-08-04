@@ -218,8 +218,10 @@
   </div>
 
   <a-scene game-manager embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
-    
-    <a-marker id="hiro-marker" preset="hiro"></a-marker>
+   
+    <!-- Hiroマーカー(preset="hiro")の代わりに、type="pattern" と url を指定 -->
+<a-marker type="pattern" url="path/to/my-custom-marker.patt">
+    <!-- <a-marker id="hiro-marker" preset="hiro"></a-marker> -->
 
     <a-entity id="game-world" position="0 0 -1.5" world-aligner="marker: #hiro-marker">
       
