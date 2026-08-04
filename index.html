@@ -3,75 +3,53 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>A-Frame WebXR AR Demo</title>
-  <!-- A-Frame 1.6.0 -->
+  <title>A-Frame WebAR Demo</title>
+  <!-- A-Frame 本体 -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <!-- iPhone/Android両対応のARライブラリ (AR.js) -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 </head>
 
-<body>
+<body style="margin: 0; overflow: hidden;">
+
   <!-- 
-    【変更点①】 webxr 属性を追加し、床や壁を認識する「hit-test」を有効化
+    loading-screen="enabled: false" で青いローディング画面を強制解除
+    embedded arjs でカメラを自動起動
   -->
-  <a-scene webxr="optionalFeatures: hit-test;">
+  <a-scene loading-screen="enabled: false" embedded arjs="sourceType: webcam; debugUIEnabled: false;">
 
-    <!-- 
-      【変更点②】 AR起動時はカメラ映像が背景になるため <a-sky> は削除（またはAR時非表示）
-    -->
-
-    <!-- ライティング（現実空間のライティング効果） -->
     <a-light type="directional" color="white" intensity="0.8" position="-1 1 2"></a-light>
     <a-light type="ambient" color="white" intensity="0.5"></a-light>
 
-    <a-camera position="0 1.6 0"></a-camera>
-
     <!-- 
-      【変更点③】 現実の床や壁を検出して赤いターゲットリングを表示する設定
+      「hiro」マーカー（画面や紙に映したマーカー）をかざすと3Dが表示される設定
     -->
-    <a-entity ar-hit-test="target: #target-box; type: footprint;">
-      <a-ring color="#FF0000" rotation="-90 0 0" radius-inner="0.08" radius-outer="0.1"></a-ring>
-    </a-entity>
+    <a-marker preset="hiro">
+      <!-- 3Dオブジェクト（立方体） -->
+      <a-box
+        color="#0095DD"
+        rotation="20 40 0"
+        position="0 0.5 0"
+        scale="0.5 0.5 0.5"
+        animation="property: rotation; from: 20 0 0; to: 20 360 0; dir: alternate; loop: true; dur: 4000; easing: easeInOutQuad;">
+      </a-box>
 
-    <!-- 
-      【変更点④】 距離感を現実サイズ（メートル単位）に合わせて調整 
-      (position="X Y Z" で Z: -1 はカメラの1メートル前方)
-    -->
-    <a-box
-      id="target-box"
-      color="#0095DD"
-      rotation="20 40 0"
-      position="0 1 -1"
-      scale="0.3 0.3 0.3"
-      animation="property: rotation; from: 20 0 0; to: 20 360 0; dir: alternate; loop: true; dur: 4000; easing: easeInOutQuad;">
-    </a-box>
+      <!-- 3Dオブジェクト（ドーナツ型） -->
+      <a-entity
+        geometry="primitive: torus; radius: 0.3; radiusTubular: 0.05;"
+        material="color: #EAEFF2; roughness: 0.1; metalness: 0.5;"
+        rotation="10 0 0"
+        position="-0.8 0.5 0"
+        scale="0.5 0.5 0.5"
+        animation="property: scale; to: 0.5 0.25 0.5; direction: alternate; dur: 2000; loop: true; easing: linear;">
+      </a-entity>
+    </a-marker>
 
-    <a-entity
-      geometry="primitive: torus; radius: 0.2; radiusTubular: 0.03;"
-      material="color: #EAEFF2; roughness: 0.1; metalness: 0.5;"
-      rotation="10 0 0"
-      position="-0.6 1 -1"
-      animation="property: scale; to: 1 0.5 1; direction: alternate; dur: 2000; loop: true; easing: linear;">
-    </a-entity>
+    <!-- カメラ定義 -->
+    <a-entity camera></a-entity>
 
   </a-scene>
 
-  <!-- JavaScriptでの動的生成（そのままでAR空間上に描画されます） -->
-  <script>
-    const scene = document.querySelector("a-scene");
-    const cylinder = document.createElement("a-cylinder");
-    cylinder.setAttribute("color", "#FF9500");
-    cylinder.setAttribute("height", "0.4");
-    cylinder.setAttribute("radius", "0.15");
-    cylinder.setAttribute("position", "0.6 1 -1");
-    scene.appendChild(cylinder);
-
-    let t = 0;
-    function render() {
-      t += 0.01;
-      requestAnimationFrame(render);
-      cylinder.setAttribute("position", `0.6 ${Math.sin(t * 2) + 1} -1`);
-    }
-    render();
-  </script>
 </body>
 
 </html>
