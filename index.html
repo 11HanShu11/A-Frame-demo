@@ -220,10 +220,10 @@
   <a-scene game-manager embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
 
     <!-- ★ここを差し替え★ -->
-  <!-- <a-marker id="hiro-marker" preset="hiro"></a-marker> -->
+  <a-marker id="hiro-marker" preset="hiro"></a-marker>
     
 　<!-- IDを追加し、タグを正しく閉じる形に修正 -->
-  <a-marker id="hiro-marker" type="pattern" url="pattern-Frame.patt"></a-marker>
+  <!-- <a-marker id="hiro-marker" type="pattern" url="pattern-Frame.patt"></a-marker> -->
 
     <a-entity id="game-world" position="0 0 -1.5" world-aligner="marker: #hiro-marker">
       
